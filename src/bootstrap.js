@@ -66,12 +66,16 @@ async function bootstrap() {
     });
 
     const file = await import(path.resolve(sourceDirectory, year, `${day}.js`));
-    await file.default();
+    const { partOne, partTwo } = await file.default();
+
+    console.log(`Part one: ${partOne}`);
+    console.log(`Part two: ${partTwo}`);
   } catch (error) {
     if (error.isTtyError) {
       console.error("Interactive terminal interface could not be rendered.");
     } else {
       console.error("Something went wrong.");
+      console.error(error);
     }
   }
 }

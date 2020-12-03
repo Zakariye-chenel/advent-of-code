@@ -11,7 +11,9 @@ async function getFiles(directory) {
   const entries = await readDirectory(directory, { withFileTypes: true });
   const files = await Promise.all(
     entries
-      .filter((entry) => entry.name !== "bootstrap.js")
+      .filter(
+        (entry) => entry.name !== "bootstrap.js" && entry.name !== "input.js"
+      )
       .map((entry) => {
         const resolvedPath = path.resolve(directory, entry.name);
         return entry.isDirectory()
@@ -55,14 +57,14 @@ async function bootstrap() {
       type: "list",
       name: "year",
       message: "Choose year",
-      choices: possibleChoices.map((choice) => choice.year),
+      choices: output.map((choice) => choice.year),
     });
 
     const { day } = await inquirer.prompt({
       type: "list",
       name: "day",
       message: "Choose a day",
-      choices: possibleChoices.map((choice) => choice.day),
+      choices: output.map((choice) => choice.day).flat(),
     });
 
     const file = await import(path.resolve(sourceDirectory, year, `${day}.js`));
